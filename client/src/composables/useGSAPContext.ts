@@ -1,9 +1,9 @@
 import { gsap } from 'gsap'
 import { onBeforeUnmount, onMounted } from 'vue'
 
-export type GSAPContext = ReturnType<typeof gsap.context> | null
+export type GSAPContext = gsap.Context | null
 
-export function useGSAPContext(initFn: () => any) {
+export function useGSAPContext(initFn: (self: gsap.Context) => any) {
   let ctx: GSAPContext = null
 
   const context = {
@@ -13,7 +13,9 @@ export function useGSAPContext(initFn: () => any) {
   }
 
   onMounted((): void => {
-    ctx = gsap.context(initFn)
+    ctx = gsap.context((self: gsap.Context) => {
+      initFn(self)
+    })
   })
 
   onBeforeUnmount(() => {
