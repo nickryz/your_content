@@ -7,13 +7,27 @@ import { MorphSVGPlugin } from '@/libs/gsap/MorphSVGPlugin'
 
 gsap.registerPlugin(MorphSVGPlugin)
 
-const active = ref(false)
+interface Props {
+  isActive?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isActive: false
+})
+
+const emits = defineEmits<{
+  (e: 'animationStart', tl: gsap.core.Timeline): gsap.core.Timeline
+}>()
+
 const pathGroup = ref<HTMLElement | null>(null)
 const { context } = useGSAPContext(initScene)
 
-watch(active, (active) => {
-  active ? context.value?.play() : context.value?.reverse()
-})
+watch(
+  () => props.isActive,
+  (active) => {
+    active ? context.value?.play() : context.value?.reverse()
+  }
+)
 
 function initScene(self: gsap.Context) {
   const paths: HTMLCollection | [] = pathGroup.value?.children || []
@@ -27,7 +41,9 @@ function initScene(self: gsap.Context) {
         path,
         {
           morphSVG: newPath,
-          stroke: 'black'
+          stroke: 'black',
+          duration: 0.8,
+          ease: 'expo.inOut'
         },
         0
       )
@@ -35,17 +51,19 @@ function initScene(self: gsap.Context) {
   })
 
   self.add('play', () => {
+    emits('animationStart', tl)
     tl.play()
   })
 
   self.add('reverse', () => {
+    emits('animationStart', tl)
     tl.reverse()
   })
 }
 </script>
 
 <template>
-  <div class="cursor-pointer" @click="active = !active">
+  <div class="cursor-pointer">
     <svg width="30" height="61" viewBox="0 0 30 61" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g ref="pathGroup">
         <path

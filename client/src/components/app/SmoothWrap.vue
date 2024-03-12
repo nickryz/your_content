@@ -4,16 +4,32 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 // @ts-ignore
 import { ScrollSmoother } from '@/libs/gsap/ScrollSmoother'
+import { watch } from 'vue'
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother)
 
-function initSmoothScroll() {
-  ScrollSmoother.create({
-    smooth: 2
-  })
+interface Props {
+  isPaused?: boolean
 }
 
-useGSAPContext(initSmoothScroll)
+const props = defineProps<Props>()
+
+const { context } = useGSAPContext(initSmoothScroll)
+
+watch(
+  () => props.isPaused,
+  (isPaused) => context.value?.paused(isPaused)
+)
+
+function initSmoothScroll(self: gsap.Context) {
+  const scroll = ScrollSmoother.create({
+    smooth: 2
+  })
+
+  self.add('paused', (isPaused: boolean) => {
+    scroll.paused(isPaused)
+  })
+}
 </script>
 
 <template>

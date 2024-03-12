@@ -3,7 +3,6 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ref } from 'vue'
 import { useGSAPContext } from '@/composables/useGSAPContext'
-import SmoothWrap from '@/components/app/SmoothWrap.vue'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -28,14 +27,12 @@ function initScene() {
 </script>
 
 <template>
-  <SmoothWrap>
-    <div v-for="i in 10" :key="i" style="height: 100vh">
-      <div class="container">
-        <router-link to="test">go to test</router-link>
-        <div ref="cubes" style="background: red; width: 100px; height: 100px" />
-      </div>
+  <div v-for="i in 10" :key="i" style="height: 100vh">
+    <div class="container">
+      <router-link to="test">go to test</router-link>
+      <div ref="cubes" style="background: red; width: 100px; height: 100px" />
     </div>
-  </SmoothWrap>
+  </div>
 </template>
 
 <style scoped></style>
