@@ -1,28 +1,16 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { ref, watch } from 'vue'
-import { useGSAPContext } from '@/composables/useGSAPContext'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { useAppStore } from '@/stores/app'
 
-interface Props {
-  isMenuActive?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  isMenuActive: false
-})
+const appStore = useAppStore()
 
 const svg = ref(null)
 const path = ref(null)
-const { context } = useGSAPContext(initScene)
 
-watch(
-  () => props.isMenuActive,
-  (active) => {
-    active ? context.value?.play() : context.value?.reverse()
-  }
-)
+const tl = gsap.timeline()
 
-function initScene(self: gsap.Context) {
+function initScene() {
   const morph = {
     shapeStart:
       'M0 9.92881e-05C23 -0.00012411 47.5 9.92881e-05 60 9.92881e-05C72.5 9.92881e-05 105 9.92881e-05 120 9.92881e-05C135 9.92881e-05 160.5 0 180 0C199.5 0 221 9.92881e-05 240 9.92881e-05C259 9.92881e-05 283 9.92881e-05 300 9.92881e-05C317 9.92881e-05 336 9.92881e-05 360 9.92881e-05C360 34 360 751 360 751H0C0 751 0 35.0003 0 9.92881e-05Z',
@@ -35,8 +23,6 @@ function initScene(self: gsap.Context) {
     menuEnd:
       'M0 464.5C23 464.5 46 464.5 60 464.5C74 464.5 100.5 464.5 120 464.5C139.5 464.5 164.5 464.5 180 464.5C195.5 464.5 223 464.5 240 464.5C257 464.5 289 464.5 300 464.5C311 464.5 336 464.5 360 464.5C360 498.5 360 751 360 751H0C0 751 0 499.5 0 464.5Z'
   }
-
-  const tl = gsap.timeline({ paused: true })
 
   tl.to(path.value, {
     delay: 0.2,
@@ -61,14 +47,20 @@ function initScene(self: gsap.Context) {
     ease: 'expo.out'
   })
 
-  self.add('play', () => {
-    tl.play()
-  })
-
-  self.add('reverse', () => {
-    tl.reverse()
-  })
+  return tl
 }
+
+onMounted(() => {
+  const position = appStore.navGSAPAnimation.labels.main
+  if (position === undefined) {
+    appStore.navGSAPAnimation.addLabel('main', '>')
+  }
+  appStore.navGSAPAnimation.add(initScene(), 'main')
+})
+
+onUnmounted(() => {
+  appStore.navGSAPAnimation.remove(initScene())
+})
 </script>
 
 <template>

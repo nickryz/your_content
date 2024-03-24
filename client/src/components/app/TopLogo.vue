@@ -4,7 +4,7 @@ import MainLogo from '@/components/icons/MainLogo.vue'
 
 <template>
   <router-link to="/" class="block">
-    <MainLogo />
+    <MainLogo class="fill-accent" />
   </router-link>
 </template>
 

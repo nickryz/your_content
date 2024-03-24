@@ -24,13 +24,22 @@ const initRouter = () => {
     ]
   })
 
-  router.beforeEach(async (to, from) => {
+  router.beforeEach(async () => {
     // NAVBAR CONTROL
     // close on each rote && before each route we are waiting animation is ending (gsap timeline as Promise)
     appStore.isNavActive = false
-    await appStore.navGSAPAnimation
+    appStore.isScrollActive = false
+
+    await appStore.navGSAPAnimation.reverse()
+    await appStore.routeGSAPAnimation.play()
+
+    appStore.isScrollActive = true
 
     return true
+  })
+
+  router.afterEach(() => {
+    appStore.routeGSAPAnimation.reverse()
   })
 
   return router

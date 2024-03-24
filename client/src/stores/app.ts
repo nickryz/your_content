@@ -1,13 +1,27 @@
-import { ref } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { defineStore } from 'pinia'
-import type { GSAPTimeline } from '@/libs/gsap/types/types'
+import gsap from 'gsap'
 
-type Timeline = null | Promise<GSAPTimeline> | GSAPTimeline
+function initTimeLine() {
+  const tl = gsap.timeline({
+    paused: true,
+    onComplete() {
+      console.log(2)
+    }
+  })
 
+  // tl.addLabel('start')
+
+  return tl
+}
 export const useAppStore = defineStore('app', () => {
+  // SCROLL
+  const isScrollActive = ref<boolean>(true)
   // NAVIGATION
   const isNavActive = ref<boolean>(false)
-  const navGSAPAnimation = ref<Timeline>(null)
+  const navGSAPAnimation = shallowRef(initTimeLine())
+  // ROUTING
+  const routeGSAPAnimation = shallowRef(initTimeLine())
 
-  return { isNavActive, navGSAPAnimation }
+  return { isNavActive, isScrollActive, navGSAPAnimation, routeGSAPAnimation }
 })

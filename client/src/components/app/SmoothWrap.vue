@@ -33,11 +33,15 @@ function initSmoothScroll(self: gsap.Context) {
 </script>
 
 <template>
-  <div id="smooth-wrapper">
+  <main id="smooth-wrapper" class="smooth-wrapper">
     <div id="smooth-content">
       <slot />
     </div>
-  </div>
+  </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.smooth-wrapper {
+  overflow: hidden !important;
+}
+</style>

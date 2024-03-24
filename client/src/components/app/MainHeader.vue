@@ -1,30 +1,36 @@
 <script setup lang="ts">
 import { useAppStore } from '@/stores/app'
-import type { GSAPTimeline } from '@/libs/gsap/types/types'
 
 import TopLogo from '@/components/app/TopLogo.vue'
 import HamburgerTrigger from '@/components/app/HamburgerTrigger.vue'
 
 const appStore = useAppStore()
 
-function onNavTriggerClick() {
+async function onNavTriggerClick() {
   appStore.isNavActive = !appStore.isNavActive
-}
-
-function setNavGSAPAnimation(tl: GSAPTimeline) {
-  appStore.navGSAPAnimation = tl
+  if (appStore.isNavActive) {
+    await appStore.routeGSAPAnimation.play()
+    appStore.navGSAPAnimation.play()
+  } else {
+    await appStore.navGSAPAnimation.reverse()
+    appStore.routeGSAPAnimation.reverse()
+  }
 }
 </script>
 
 <template>
-  <header class="w-full p-5 flex justify-between">
-    <TopLogo class="w-14" />
+  <header class="main-header w-full px-5 py-3 sm:py-5 flex justify-between">
+    <TopLogo class="w-10 sm:w-14" />
     <HamburgerTrigger
       :is-active="appStore.isNavActive"
+      class="h-10 sm:h-14 w-auto"
       @click="onNavTriggerClick"
-      @animation-start="setNavGSAPAnimation"
     />
   </header>
 </template>
 
-<style scoped></style>
+<style scoped>
+.main-header {
+  min-height: var(--header-height);
+}
+</style>

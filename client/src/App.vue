@@ -5,21 +5,22 @@ import { useAppStore } from '@/stores/app'
 import PageForPage from '@/components/app/PageForPage.vue'
 import MainHeader from '@/components/app/MainHeader.vue'
 import SmoothWrap from '@/components/app/SmoothWrap.vue'
+import MainContentWrap from '@/components/app/MainContentWrap.vue'
 
 const appStore = useAppStore()
 </script>
 
 <template>
   <!-- HEADER -->
-  <MainHeader class="fixed z-10" />
+  <MainHeader class="fixed z-20" />
   <!-- PAGE BG -->
-  <PageForPage :is-menu-active="appStore.isNavActive" />
+  <PageForPage />
   <!-- MAIN CONTENT -->
-  <main>
-    <SmoothWrap :is-paused="appStore.isNavActive">
+  <MainContentWrap>
+    <SmoothWrap :is-paused="appStore.isNavActive || !appStore.isScrollActive">
       <RouterView />
     </SmoothWrap>
-  </main>
+  </MainContentWrap>
 </template>
 
 <style scoped></style>
