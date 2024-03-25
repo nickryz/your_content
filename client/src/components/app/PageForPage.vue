@@ -8,9 +8,11 @@ const appStore = useAppStore()
 const svg = ref(null)
 const path = ref(null)
 
-const tl = gsap.timeline()
+const name = 'pageForPage'
 
 function initScene() {
+  const tl = gsap.timeline()
+
   const morph = {
     shapeStart:
       'M0 9.92881e-05C23 -0.00012411 47.5 9.92881e-05 60 9.92881e-05C72.5 9.92881e-05 105 9.92881e-05 120 9.92881e-05C135 9.92881e-05 160.5 0 180 0C199.5 0 221 9.92881e-05 240 9.92881e-05C259 9.92881e-05 283 9.92881e-05 300 9.92881e-05C317 9.92881e-05 336 9.92881e-05 360 9.92881e-05C360 34 360 751 360 751H0C0 751 0 35.0003 0 9.92881e-05Z',
@@ -50,16 +52,11 @@ function initScene() {
   return tl
 }
 
-onMounted(() => {
-  const position = appStore.navGSAPAnimation.labels.main
-  if (position === undefined) {
-    appStore.navGSAPAnimation.addLabel('main', '>')
-  }
-  appStore.navGSAPAnimation.add(initScene(), 'main')
-})
+onMounted(() => appStore.navTimeline?.add(initScene(), 'main'))
 
 onUnmounted(() => {
-  appStore.navGSAPAnimation.remove(initScene())
+  const tl = appStore.navTimeline.getById(name)
+  appStore.navGSAPAnimation.remove(tl)
 })
 </script>
 

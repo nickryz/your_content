@@ -8,10 +8,11 @@ gsap.registerPlugin(MorphSVGPlugin)
 
 interface Props {
   imgSrc: string
+  dscr?: string
 }
 
 const props = defineProps<Props>()
-const uid = getCurrentInstance()?.uid || props.imgSrc + Math.random()
+const uid: string | number = getCurrentInstance()?.uid || Math.random()
 
 useGSAPContext(initScene)
 
@@ -19,8 +20,6 @@ const figure = ref(null)
 const path = ref(null)
 
 function initScene() {
-  gsap.to(figure.value, { opacity: 0 })
-
   const tl = gsap.timeline({ paused: true })
 
   const morph = {
@@ -35,14 +34,16 @@ function initScene() {
       'M0 0.5C0 0.223858 0.223858 0 0.5 0H659.5C659.776 0 660 0.223858 660 0.5V0.5C660 0.776142 659.829 1 659.553 1C653.058 1 577.308 1 528 1C476.451 1 447.549 1 396 1C344.451 1 315.549 1 264 1C212.451 1 183.549 1 132 1C82.6923 1 6.94176 1 0.447341 1C0.171199 1 0 0.776142 0 0.5V0.5Z'
   }
 
+  gsap.set(figure.value, { opacity: 0 })
+
   tl.to(path.value, {
     morphSVG: morph.middle[Math.floor(Math.random() * morph.middle.length)],
-    duration: 0.5,
+    duration: 0.7,
     ease: 'power4.in'
   })
   tl.to(path.value, {
     morphSVG: morph.end,
-    duration: 0.5,
+    duration: 0.7,
     ease: 'power4.out'
   })
 
@@ -51,37 +52,45 @@ function initScene() {
       scrollTrigger: {
         trigger: figure.value,
         start: 'top 70%'
-      },
-      onComplete: function () {
-        tl.play()
       }
     })
     .to(figure.value, {
       opacity: 1,
-      duration: 0.01
+      duration: 0.01,
+      onComplete: function () {
+        tl.play()
+      }
     })
 }
 </script>
 
 <template>
-  <figure ref="figure" class="aspect-square overflow-hidden rounded-2xl">
-    <svg viewBox="0 0 660 660" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-      <mask :id="uid">
-        <path
-          ref="path"
-          d="M0 0.5C0 0.223858 0.223858 0 0.5 0H659.5C659.776 0 660 0.223858 660 0.5V0.5C660 0.776142 659.829 1 659.553 1C653.058 1 577.308 1 528 1C476.451 1 447.549 1 396 1C344.451 1 315.549 1 264 1C212.451 1 183.549 1 132 1C82.6923 1 6.94176 1 0.447341 1C0.171199 1 0 0.776142 0 0.5V0.5Z"
-          fill="#EEEEF2"
-        ></path>
-      </mask>
-      <image
-        width="100%"
-        height="100%"
+  <figure>
+    <div ref="figure" class="aspect-square overflow-hidden rounded-2xl">
+      <svg
+        viewBox="0 0 660 660"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
         class="w-full h-full"
-        :mask="`url(#${uid})`"
-        :href="props.imgSrc"
-        data-svg-origin="0 0"
-      ></image>
-    </svg>
+      >
+        <mask :id="`${uid}`">
+          <path
+            ref="path"
+            d="M0 0.5C0 0.223858 0.223858 0 0.5 0H659.5C659.776 0 660 0.223858 660 0.5V0.5C660 0.776142 659.829 1 659.553 1C653.058 1 577.308 1 528 1C476.451 1 447.549 1 396 1C344.451 1 315.549 1 264 1C212.451 1 183.549 1 132 1C82.6923 1 6.94176 1 0.447341 1C0.171199 1 0 0.776142 0 0.5V0.5Z"
+            fill="#EEEEF2"
+          ></path>
+        </mask>
+        <image
+          width="100%"
+          height="100%"
+          class="w-full h-full"
+          :mask="`url(#${uid})`"
+          :href="props.imgSrc"
+          data-svg-origin="0 0"
+        ></image>
+      </svg>
+    </div>
+    <figcaption v-if="props.dscr" class="mt-2">{{ dscr }}</figcaption>
   </figure>
 </template>
 

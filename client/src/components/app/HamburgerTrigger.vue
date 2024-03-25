@@ -9,11 +9,12 @@ gsap.registerPlugin(MorphSVGPlugin)
 
 const appStore = useAppStore()
 
+const name = 'burgerTrigger'
 const pathGroup = ref<HTMLElement | null>(null)
 
-const tl = gsap.timeline()
-
 function initScene() {
+  const tl = gsap.timeline({ id: name })
+
   const paths: HTMLCollection | [] = pathGroup.value?.children || []
 
   ;[...paths].forEach((path) => {
@@ -36,16 +37,11 @@ function initScene() {
   return tl
 }
 
-onMounted(() => {
-  const position = appStore.navGSAPAnimation.labels.main
-  if (position === undefined) {
-    appStore.navGSAPAnimation.addLabel('main', '>')
-  }
-  appStore.navGSAPAnimation.add(initScene(), 'main')
-})
+onMounted(() => appStore.navTimeline?.add(initScene(), 'main'))
 
 onUnmounted(() => {
-  appStore.navGSAPAnimation.remove(initScene())
+  const tl = appStore.navTimeline.getById(name)
+  appStore.navGSAPAnimation.remove(tl)
 })
 </script>
 

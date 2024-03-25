@@ -5,10 +5,8 @@ import { ref } from 'vue'
 import { useGSAPContext } from '@/composables/useGSAPContext'
 
 import HeroSection from '@/components/main/HeroSection.vue'
-import PreTitleText from '@/components/blocks/PreTitleText.vue'
 import AboutSection from '@/components/main/AboutSection.vue'
 import PortfolioSection from '@/components/main/PortfolioSection.vue'
-import SmoothImage from '@/components/blocks/SmoothImage.vue'
 
 gsap.registerPlugin(ScrollTrigger)
 

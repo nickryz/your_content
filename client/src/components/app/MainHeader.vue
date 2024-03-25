@@ -9,21 +9,21 @@ const appStore = useAppStore()
 async function onNavTriggerClick() {
   appStore.isNavActive = !appStore.isNavActive
   if (appStore.isNavActive) {
-    await appStore.routeGSAPAnimation.play()
-    appStore.navGSAPAnimation.play()
+    await appStore.routeTimeline.play()
+    appStore.navTimeline.play()
   } else {
-    await appStore.navGSAPAnimation.reverse()
-    appStore.routeGSAPAnimation.reverse()
+    await appStore.navTimeline.reverse()
+    appStore.routeTimeline.reverse()
   }
 }
 </script>
 
 <template>
-  <header class="main-header w-full px-5 py-3 sm:py-5 flex justify-between">
-    <TopLogo class="w-10 sm:w-14" />
+  <header class="main-header w-full px-5 py-3 sm:py-5 flex justify-between pointer-events-none">
+    <TopLogo class="w-10 sm:w-14 pointer-events-auto" />
     <HamburgerTrigger
       :is-active="appStore.isNavActive"
-      class="h-10 sm:h-14 w-auto"
+      class="h-10 sm:h-14 w-auto pointer-events-auto"
       @click="onNavTriggerClick"
     />
   </header>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { useAppStore } from '@/stores/app'
+import gsap from 'gsap'
 
 const initRouter = () => {
   const appStore = useAppStore()
@@ -30,8 +31,15 @@ const initRouter = () => {
     appStore.isNavActive = false
     appStore.isScrollActive = false
 
-    await appStore.navGSAPAnimation.reverse()
-    await appStore.routeGSAPAnimation.play()
+    const animations = []
+
+    if (appStore.navTimeline.totalDuration() > 0) animations.push(appStore.navTimeline?.reverse())
+    if (appStore.routeTimeline.totalDuration() > 0) animations.push(appStore.routeTimeline?.play())
+
+    await Promise.all(animations)
+
+    // await appStore.navGSAPAnimation?.reverse()
+    // await appStore.routeGSAPAnimation?.play()
 
     appStore.isScrollActive = true
 
@@ -39,7 +47,7 @@ const initRouter = () => {
   })
 
   router.afterEach(() => {
-    appStore.routeGSAPAnimation.reverse()
+    appStore.routeTimeline?.reverse()
   })
 
   return router

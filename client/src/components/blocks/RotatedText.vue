@@ -33,6 +33,7 @@ function initScene() {
   const repeatDelay = cycleDuration * (textItems.length - 1) + staggerDelay
 
   const tl = gsap.timeline({ paused: false })
+
   tl.from(textItems, {
     y: '100%',
     duration,
@@ -55,6 +56,8 @@ function initScene() {
     },
     cycleDuration
   )
+
+  tl.seek(duration)
 }
 </script>
 

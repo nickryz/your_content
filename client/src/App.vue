@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 
+import { RouterView } from 'vue-router'
 import PageForPage from '@/components/app/PageForPage.vue'
 import MainHeader from '@/components/app/MainHeader.vue'
 import SmoothWrap from '@/components/app/SmoothWrap.vue'

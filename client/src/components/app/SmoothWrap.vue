@@ -23,7 +23,7 @@ watch(
 
 function initSmoothScroll(self: gsap.Context) {
   const scroll = ScrollSmoother.create({
-    smooth: 2
+    smooth: 1.2
   })
 
   self.add('paused', (isPaused: boolean) => {
@@ -33,15 +33,11 @@ function initSmoothScroll(self: gsap.Context) {
 </script>
 
 <template>
-  <main id="smooth-wrapper" class="smooth-wrapper">
+  <div id="smooth-wrapper" class="smooth-wrapper">
     <div id="smooth-content">
       <slot />
     </div>
-  </main>
+  </div>
 </template>
 
-<style scoped>
-.smooth-wrapper {
-  overflow: hidden !important;
-}
-</style>
+<style scoped></style>

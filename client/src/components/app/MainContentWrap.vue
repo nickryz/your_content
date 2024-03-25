@@ -5,10 +5,11 @@ import gsap from 'gsap'
 
 const appStore = useAppStore()
 
+const name = 'mainContent'
 const main = ref(null)
-const tl = gsap.timeline()
 
 function initScene() {
+  const tl = gsap.timeline()
   const mainEl: HTMLElement | null = main.value
 
   if (mainEl) {
@@ -19,18 +20,19 @@ function initScene() {
 }
 
 onMounted(() => {
-  appStore.routeGSAPAnimation.add(initScene())
+  appStore.routeTimeline?.add(initScene(), 0)
 })
 
 onUnmounted(() => {
-  appStore.routeGSAPAnimation.remove(initScene())
+  const tl = appStore.routeTimeline.getById(name)
+  appStore.routeTimeline.remove(tl)
 })
 </script>
 
 <template>
-  <div ref="main">
+  <main ref="main" class="h-full">
     <slot />
-  </div>
+  </main>
 </template>
 
 <style scoped></style>
